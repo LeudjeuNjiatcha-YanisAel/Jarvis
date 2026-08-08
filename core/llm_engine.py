@@ -1,4 +1,4 @@
-
+#Just A Rather Very Intelligent System
 from openai import OpenAI
 from core.config import Config
 from utils.logger import setup_logger
