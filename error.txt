@@ -1,0 +1,45 @@
+slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  from pkg_resources import resource_stream, resource_exists
+pygame 2.6.1 (SDL 2.28.4, Python 3.10.12)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+[2026-08-08 23:08:03,436] - Main - INFO - Initialisation du système J.A.R.V.I.S...
+[2026-08-08 23:08:04,517] - Voix - INFO - Système vocal : ElevenLabs activé (Qualité Premium).
+[2026-08-08 23:08:04,517] - Voix - INFO - Génération de la synthèse vocale...
+[2026-08-08 23:08:04,517] - Voix - ERROR - Erreur lors de la synthèse vocale : 'ElevenLabs' object has no attribute 'generate'
+[2026-08-08 23:08:04,518] - Main - INFO - Système en ligne et prêt à recevoir des commandes.
+ALSA lib pcm_dmix.c:1032:(snd_pcm_dmix_open) unable to open slave
+ALSA lib pcm.c:2664:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.rear
+ALSA lib pcm.c:2664:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.center_lfe
+ALSA lib pcm.c:2664:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.side
+ALSA lib pcm_route.c:877:(find_matching_chmap) Found no matching channel map
+ALSA lib pcm_oss.c:397:(_snd_pcm_oss_open) Cannot open device /dev/dsp
+ALSA lib pcm_oss.c:397:(_snd_pcm_oss_open) Cannot open device /dev/dsp
+ALSA lib confmisc.c:160:(snd_config_get_card) Invalid field card
+ALSA lib pcm_usb_stream.c:482:(_snd_pcm_usb_stream_open) Invalid card 'card'
+ALSA lib confmisc.c:160:(snd_config_get_card) Invalid field card
+ALSA lib pcm_usb_stream.c:482:(_snd_pcm_usb_stream_open) Invalid card 'card'
+ALSA lib pcm_dmix.c:1032:(snd_pcm_dmix_open) unable to open slave
+ALSA lib pcm_dmix.c:1032:(snd_pcm_dmix_open) unable to open slave
+ALSA lib pcm.c:2664:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.rear
+ALSA lib pcm.c:2664:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.center_lfe
+ALSA lib pcm.c:2664:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.side
+ALSA lib pcm_route.c:877:(find_matching_chmap) Found no matching channel map
+ALSA lib pcm_oss.c:397:(_snd_pcm_oss_open) Cannot open device /dev/dsp
+ALSA lib pcm_oss.c:397:(_snd_pcm_oss_open) Cannot open device /dev/dsp
+ALSA lib confmisc.c:160:(snd_config_get_card) Invalid field card
+ALSA lib pcm_usb_stream.c:482:(_snd_pcm_usb_stream_open) Invalid card 'card'
+ALSA lib confmisc.c:160:(snd_config_get_card) Invalid field card
+ALSA lib pcm_usb_stream.c:482:(_snd_pcm_usb_stream_open) Invalid card 'card'
+ALSA lib pcm_dmix.c:1032:(snd_pcm_dmix_open) unable to open slave
+[2026-08-08 23:08:04,691] - Oreilles - INFO - Ajustement au bruit de fond...
+[2026-08-08 23:08:05,714] - Oreilles - INFO - J'écoute... (Parlez maintenant)
+[2026-08-08 23:08:08,757] - Oreilles - INFO - Traitement de l'audio en cours...
+[2026-08-08 23:08:12,657] - Oreilles - INFO - Vous avez dit :  Over YouTube.
+[2026-08-08 23:08:12,659] - Main - INFO - Transmission du texte au cerveau...
+[2026-08-08 23:08:12,659] - Cerveau - INFO - Je réfléchis à la requête : ' Over YouTube.'
+[2026-08-08 23:08:13,614] - Cerveau - ERROR - Erreur lors de la génération de la réponse : Error code: 400 - [{'error': {'code': 400, 'message': 'Please pass a valid API key', 'status': 'INVALID_ARGUMENT'}}]
+
+[J.A.R.V.I.S.] : Désolé Monsieur, mes circuits cognitifs rencontrent un problème technique.
+
+[2026-08-08 23:08:13,614] - Voix - INFO - Génération de la synthèse vocale...
+[2026-08-08 23:08:13,614] - Voix - ERROR - Erreur lors de la synthèse vocale : 'ElevenLabs' object has no attribute 'generate'
