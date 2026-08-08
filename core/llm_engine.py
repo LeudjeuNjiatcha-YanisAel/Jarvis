@@ -13,11 +13,15 @@ class LLMEngine:
     
     def __init__(self):
         # 5. Vérifie si on a bien une clé API configurée
-        if not Config.OPENAI_API_KEY or Config.OPENAI_API_KEY == "votre_cle_api_ici":
-            logger.error("Aucune clé API OpenAI valide trouvée. Veuillez vérifier votre fichier .env.")
+        if not Config.API_KEY or Config.API_KEY == "votre_cle_ici":
+            logger.error("Aucune clé API valide trouvée. Veuillez vérifier votre fichier .env.")
             
-        # 6. Initialise le client OpenAI avec notre clé API
-        self.client = OpenAI(api_key=Config.OPENAI_API_KEY)
+        # 6. Initialise le client OpenAI. L'astuce magique est d'utiliser `base_url` 
+        # pour rediriger la requête vers Gemini, Groq ou Cerebras au lieu d'OpenAI !
+        self.client = OpenAI(
+            api_key=Config.API_KEY,
+            base_url=Config.BASE_URL
+        )
         
         # 7. Stocke le nom du modèle à utiliser
         self.model = Config.MODEL_NAME
