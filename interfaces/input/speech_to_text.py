@@ -12,9 +12,12 @@ class SpeechToText:
         self.recognizer = sr.Recognizer()
         
         # 2. On connecte le client à l'API (pour utiliser Whisper)
+        # On force l'URL de Groq car "whisper-large-v3-turbo" n'existe que chez eux !
+        # On utilise GROQ_API_KEY, et si elle n'existe pas, on tente l'API_KEY normale.
+        cle_groq = Config.GROQ_API_KEY if Config.GROQ_API_KEY else Config.API_KEY
         self.client = OpenAI(
-            api_key=Config.API_KEY, 
-            base_url=Config.BASE_URL 
+            api_key=cle_groq, 
+            base_url="https://api.groq.com/openai/v1" 
         )
         
     def listen_and_transcribe(self) -> str:
