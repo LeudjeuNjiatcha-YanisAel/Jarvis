@@ -1,8 +1,6 @@
-# 1. Importe le client OpenAI pour communiquer avec l'IA
+
 from openai import OpenAI
-# 2. Importe notre configuration (qui contient la clé API et le nom du modèle)
 from core.config import Config
-# 3. Importe notre outil de log pour suivre ce que fait le cerveau
 from utils.logger import setup_logger
 
 # 4. Initialise un logger spécifique pour le module "Cerveau"
