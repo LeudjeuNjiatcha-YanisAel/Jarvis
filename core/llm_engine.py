@@ -23,7 +23,12 @@ from skills.network import(
     toggle_wifi
 )
 
-from skills.power import()
+from skills.power import(
+    shutdown_system,
+    restart_system,
+    suspend_system,
+    lock_session
+)
 
 logger = setup_logger("Cerveau")
 
