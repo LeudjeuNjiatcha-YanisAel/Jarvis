@@ -1,10 +1,9 @@
-import logging # 1. Importe la bibliothèque standard de Python pour gérer un historique d'événements (logs).
-import sys     # 2. Importe le module système, qui nous permettra d'afficher du texte dans le terminal.
+import logging
+import sys    
 
 def setup_logger(name: str = "Jarvis") -> logging.Logger:
-    """Configure et retourne un logger.""" # 3. Une "docstring" expliquant ce que fait la fonction.
-    
-    # 4. Crée ou récupère un objet Logger avec le nom spécifié (par défaut, il s'appellera "Jarvis").
+    """Configure et retourne un logger.""" 
+    # Crée ou récupère un objet Logger avec le nom spécifié
     logger = logging.getLogger(name) 
     
     # 5. Définit le niveau d'importance minimal des messages à afficher.

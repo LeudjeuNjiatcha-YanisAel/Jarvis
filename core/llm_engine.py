@@ -1,6 +1,5 @@
 # Just A Rather Very Intelligent System
 from openai import OpenAI
-# On importe json pour lire les paramètres renvoyés par l'IA quand elle appelle un outil
 import json
 from core.config import Config
 from utils.logger import setup_logger
