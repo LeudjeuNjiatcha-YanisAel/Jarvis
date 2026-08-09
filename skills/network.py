@@ -1,9 +1,11 @@
 import socket
 import platform
 import subprocess
-from utils.logger import logger
+from utils.logger import setup_logger
 
-def check_internet_connection(host= "8.8.8.8", port = 53, timeout = 3) :
+logger = setup_logger("Network")
+
+def check_internet_connection(host = "8.8.8.8", port = 53, timeout = 3):
     """Vérifie si la connexion Internet est active via un socket TCP rapide."""
     try:
         socket.setdefaulttimeout(timeout)
@@ -13,7 +15,7 @@ def check_internet_connection(host= "8.8.8.8", port = 53, timeout = 3) :
     except OSError:
         return False
 
-def get_local_ip() -> str:
+def get_local_ip():
     """Récupère l'adresse IP locale principale de la machine."""
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
@@ -24,7 +26,7 @@ def get_local_ip() -> str:
         logger.error(f"Impossible de déterminer l'adresse IP locale : {e}")
         return "127.0.0.1"
 
-def ping_host(host: str = "google.com", count: int = 2) -> dict:
+def ping_host(host = "google.com", count = 2):
     """Effectue un ping vers un hôte et retourne un diagnostic complet."""
     system = platform.system().lower()
     param = "-n" if system == "windows" else "-c"
@@ -45,7 +47,7 @@ def ping_host(host: str = "google.com", count: int = 2) -> dict:
         logger.error(f"Erreur lors du ping vers {host}: {e}")
         return {"success": False, "host": host, "message": str(e), "output": ""}
 
-def toggle_wifi(enable: bool) -> bool:
+def toggle_wifi(enable):
     """Active ou désactive le Wi-Fi (Optimisé pour Linux NetworkManager)."""
     system = platform.system().lower()
     state = "on" if enable else "off"
