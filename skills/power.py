@@ -15,16 +15,16 @@ def run_command(cmd:list[str]):
         return False
         
 #  Skill : Éteindre
-def shutdown_system(delay:int=0):
+def shutdown_system(delay = 0):
     """Éteint l'ordinateur"""
     logger.info("Arrêt du système...")
     if platform.system().lower() == "windows":
-        return run_command(["shutdown", "/s", "/t". 1])
+        return run_command(["shutdown", "/s", "/t",str(delay)])
     elif platform.system().lower() == "linux":
-        t"sudo", "shutdown", "-h", f"+{delay}"ime_arg = "now" if delay == 0 else f"+{max(1, delay // 60)}"
+        time_arg = "now" if delay == 0 else f"+{max(1, delay // 60)}"
         return run_command(["shutdown", "-h",time_arg])
     elif platform.system().lower() == "darwin":
-        return run_command(["sudo", "shutdown", "-h",1])
+        return run_command(["sudo", "shutdown", "-h",str(delay)])
     logger.error(f"Système d'exploitation non supporté : {system}")
     
     return False

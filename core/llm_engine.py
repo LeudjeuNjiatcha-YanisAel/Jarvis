@@ -60,7 +60,15 @@ class LLMEngine:
             "save_note": save_note,
             "read_notes": read_notes,
             "search_web": search_web,
-            "youtube_video": youtube_video
+            "youtube_video": youtube_video,
+            "toggle_wifi": toggle_wifi,
+            "check_internet_connection": check_internet_connection,
+            "get_local_ip": get_local_ip,
+            "ping_host": ping_host,
+            "shutdown_system": shutdown_system,
+            "restart_system": restart_system,
+            "suspend_system": suspend_system,
+            "lock_session": lock_session
         }
         
         self.tools = [
@@ -206,6 +214,83 @@ class LLMEngine:
                         },
                         "required": ["query"]
                     }
+                }
+            },
+            # Skill 11 :
+            {
+                "type": "function",
+                "function": {
+                    "name": "toggle_wifi",
+                    "description": "Active ou désactive le Wi-Fi",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "enable": {
+                                "type": "boolean",
+                                "description": "True pour activer le Wi-Fi, False pour désactiver"
+                            }
+                        },
+                        "required": ["enable"]
+                    }
+                }
+            },
+            # Skill 12 :
+            {
+                "type": "function",
+                "function": {
+                    "name": "check_internet_connection",
+                    "description": "Vérifie si l'ordinateur est connecté à Internet",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {}
+                    }
+                }
+            },
+            # Skill 13 :
+            {
+                "type": "function",
+                "function": {
+                    "name": "get_local_ip",
+                    "description": "Donne l'adresse IP locale de l'ordinateur",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {}
+                    }
+                }
+            },
+            # Skill 14 :
+            {
+                "type": "function",
+                "function": {
+                    "name": "ping_host",
+                    "description": "Effectue un ping vers un hôte distant pour vérifier la connectivité réseau",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "host": {
+                                "type": "string",
+                                "description": "L'adresse IP ou le nom d'hôte à pinger"
+                            }
+                        },
+                        "required": ["host"]
+                    }
+                }
+            },
+            #Skill 15 :
+            {
+                "type":"function",
+                "function":{
+                    "name":"lock_session",
+                    "description":"Verrouille la session utilisateur",
+                    "parameters":{
+                        "type":"object",
+                        "properties":{
+                            "host":{
+                                "type":"string",
+                                "description":"Lock la session utilisateur"
+                            }
+                        }
+                    }  
                 }
             }
         ]
