@@ -56,7 +56,7 @@ class LLMEngine:
         # Liste des outils (Skills) au format JSON pour l'IA
         # Chaque outil a un nom, une description et ses paramètres
         self.tools = [
-            # ── Skill 1 : Ouvrir un site web ──
+            #  Skill 1 : Ouvrir un site web 
             {
                 "type": "function",
                 "function": {
@@ -74,7 +74,7 @@ class LLMEngine:
                     }
                 }
             },
-            # ── Skill 2 : Date et heure ──
+            #  Skill 2 : Date et heure 
             {
                 "type": "function",
                 "function": {
@@ -86,7 +86,7 @@ class LLMEngine:
                     }
                 }
             },
-            # ── Skill 3 : Ouvrir une application ──
+            #  Skill 3 : Ouvrir une application 
             {
                 "type": "function",
                 "function": {
@@ -104,7 +104,7 @@ class LLMEngine:
                     }
                 }
             },
-            # ── Skill 4 : Régler le volume ──
+            #  Skill 4 : Régler le volume 
             {
                 "type": "function",
                 "function": {
@@ -122,7 +122,7 @@ class LLMEngine:
                     }
                 }
             },
-            # ── Skill 5 : Infos système ──
+            #  Skill 5 : Infos système 
             {
                 "type": "function",
                 "function": {
@@ -134,7 +134,7 @@ class LLMEngine:
                     }
                 }
             },
-            # ── Skill 6 : Sauvegarder une note ──
+            #  Skill 6 : Sauvegarder une note 
             {
                 "type": "function",
                 "function": {
@@ -152,7 +152,7 @@ class LLMEngine:
                     }
                 }
             },
-            # ── Skill 7 : Lire les notes ──
+            #  Skill 7 : Lire les notes 
             {
                 "type": "function",
                 "function": {
@@ -164,7 +164,7 @@ class LLMEngine:
                     }
                 }
             },
-            # ── Skill 8 : Recherche web ──
+            #  Skill 8 : Recherche web 
             {
                 "type": "function",
                 "function": {
@@ -181,8 +181,8 @@ class LLMEngine:
                         "required": ["query"]
                     }
                 }
-            }
-            # ── Skill 9 : Ouvre une video youtube specifique ──
+            },
+            #  Skill 9 : Ouvre une video youtube specifique 
             {
                 "type": "function",
                 "function": {
