@@ -6,22 +6,6 @@ from utils.logger import setup_logger
 
 logger = setup_logger("Skills-Système")
 
-# ═══════════════════════════════════════════════════════
-# SKILL 1 : Ouvrir un site web
-# ═══════════════════════════════════════════════════════
-def open_website(url: str) -> str:
-    """Ouvre un site web dans le navigateur par défaut de l'ordinateur."""
-    logger.info(f"Exécution : Ouverture de {url}")
-    try:
-        webbrowser.open(url)
-        return f"Action réussie : j'ai ouvert le site {url} sur l'écran."
-    except Exception as e:
-        return f"L'action a échoué : {e}"
-
-
-# ═══════════════════════════════════════════════════════
-# SKILL 2 : Obtenir la date et l'heure actuelles
-# ═══════════════════════════════════════════════════════
 def get_datetime() -> str:
     """Retourne la date et l'heure actuelles du système."""
     # On récupère la date/heure formatée en français
@@ -31,10 +15,6 @@ def get_datetime() -> str:
     logger.info(f"Date/Heure demandée : {date_str}")
     return f"Nous sommes le {date_str}."
 
-
-# ═══════════════════════════════════════════════════════
-# SKILL 3 : Ouvrir une application installée sur Linux
-# ═══════════════════════════════════════════════════════
 def open_application(app_name: str) -> str:
     """Ouvre une application installée sur le système Linux."""
     logger.info(f"Exécution : Lancement de l'application '{app_name}'")
@@ -45,7 +25,7 @@ def open_application(app_name: str) -> str:
         "terminal": "gnome-terminal",
         "navigateur": "firefox",
         "firefox": "firefox",
-        "chrome": "google-chrome",
+        "google-chrome": "google-chrome",
         "fichiers": "nautilus",
         "explorateur": "nautilus",
         "éditeur": "gedit",
@@ -75,10 +55,6 @@ def open_application(app_name: str) -> str:
     except Exception as e:
         return f"Erreur lors du lancement de '{app_name}' : {e}"
 
-
-# ═══════════════════════════════════════════════════════
-# SKILL 4 : Contrôler le volume du système
-# ═══════════════════════════════════════════════════════
 def set_volume(level: int) -> str:
     """Règle le volume du système entre 0 et 100."""
     logger.info(f"Exécution : Réglage du volume à {level}%")
@@ -87,8 +63,7 @@ def set_volume(level: int) -> str:
     level = max(0, min(100, level))
     
     try:
-        # amixer est l'outil en ligne de commande pour le son sous Linux
-        # 'Master' est le canal audio principal
+        
         subprocess.run(
             ["amixer", "set", "Master", f"{level}%"],
             capture_output=True
@@ -97,10 +72,6 @@ def set_volume(level: int) -> str:
     except Exception as e:
         return f"Erreur lors du réglage du volume : {e}"
 
-
-# ═══════════════════════════════════════════════════════
-# SKILL 5 : Obtenir les infos système (RAM, CPU, batterie)
-# ═══════════════════════════════════════════════════════
 def get_system_info() -> str:
     """Retourne les informations sur l'état actuel du système."""
     logger.info("Exécution : Récupération des informations système")
@@ -138,11 +109,6 @@ def get_system_info() -> str:
     
     return " | ".join(info)
 
-
-# ═══════════════════════════════════════════════════════
-# SKILL 6 : Prendre une note ou lire les notes
-# ═══════════════════════════════════════════════════════
-
 # Le fichier où Jarvis stocke ses notes
 NOTES_FILE = os.path.join(os.path.dirname(__file__), "..", "data", "notes.txt")
 
@@ -177,22 +143,3 @@ def read_notes() -> str:
         return "Aucune note enregistrée pour le moment."
     
     return f"Voici vos notes :\n{notes}"
-
-
-# ═══════════════════════════════════════════════════════
-# SKILL 7 : Recherche web rapide (ouvre Google avec la requête)
-# ═══════════════════════════════════════════════════════
-def search_web(query: str) -> str:
-    """Effectue une recherche Google avec la requête donnée."""
-    logger.info(f"Exécution : Recherche web pour '{query}'")
-    
-    # On encode la requête pour l'URL (les espaces deviennent des +)
-    import urllib.parse
-    encoded_query = urllib.parse.quote_plus(query)
-    url = f"https://www.google.com/search?q={encoded_query}"
-    
-    try:
-        webbrowser.open(url)
-        return f"J'ai lancé une recherche Google pour : '{query}'."
-    except Exception as e:
-        return f"Erreur lors de la recherche : {e}"

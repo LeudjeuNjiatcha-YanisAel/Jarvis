@@ -5,14 +5,17 @@ from core.config import Config
 from utils.logger import setup_logger
 # On importe TOUTES nos compétences
 from skills.system_control import (
-    open_website,
     get_datetime,
     open_application,
     set_volume,
     get_system_info,
     save_note,
-    read_notes,
-    search_web
+    read_notes
+)
+from skills.web_search import(
+    open_website,
+    search_web,
+    youtube_video
 )
 
 logger = setup_logger("Cerveau")
@@ -32,8 +35,8 @@ class LLMEngine:
         
         # La personnalité de Jarvis
         self.system_prompt = (
-            "Tu es J.A.R.V.I.S., un assistant virtuel très intelligent, poli et un peu sarcastique. "
-            "Tu réponds en français. Tes réponses doivent être concises."
+            "Ton nom  est JARVIS., un assistant virtuel très intelligent, poli et un peu sarcastique. "
+            "Tu réponds en français. Tes réponses doivent être concises.Capable aussi de faire des suggestion"
         )
         
         # Dictionnaire qui associe le NOM de chaque outil à sa VRAIE fonction Python
@@ -47,6 +50,7 @@ class LLMEngine:
             "save_note": save_note,
             "read_notes": read_notes,
             "search_web": search_web,
+            "youtube_video": youtube_video
         }
         
         # Liste des outils (Skills) au format JSON pour l'IA
@@ -166,6 +170,24 @@ class LLMEngine:
                 "function": {
                     "name": "search_web",
                     "description": "Recherche quelque chose sur Google. Utilise quand on dit 'cherche...', 'recherche...'.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "query": {
+                                "type": "string",
+                                "description": "La requête de recherche"
+                            }
+                        },
+                        "required": ["query"]
+                    }
+                }
+            }
+            # ── Skill 9 : Ouvre une video youtube specifique ──
+            {
+                "type": "function",
+                "function": {
+                    "name": "youtube_video",
+                    "description": "Ouvre une video youtube specifique precifque celle la plus apprecie lorsque tu fais des recherche sur le web",
                     "parameters": {
                         "type": "object",
                         "properties": {
