@@ -3,7 +3,6 @@ from openai import OpenAI
 import json
 from core.config import Config
 from utils.logger import setup_logger
-# On importe TOUTES nos compétences
 from skills.system_control import (
     get_datetime,
     open_application,
