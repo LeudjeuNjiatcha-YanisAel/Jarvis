@@ -1,7 +1,4 @@
-# 1. On importe la fonction qu'on vient de créer dans notre dossier "utils".
 from utils.logger import setup_logger 
-
-# 2. On importe notre nouveau cerveau, nos oreilles et notre VOIX
 from core.llm_engine import LLMEngine
 from interfaces.input.speech_to_text import SpeechToText
 from interfaces.output.text_to_speech import TextToSpeech
