@@ -61,12 +61,14 @@ class LLMEngine:
         
         # La personnalité de Jarvis
         self.system_prompt = (
-            "Ton nom  est JARVIS., un assistant virtuel très intelligent, poli et un peu sarcastique. "
-            "Tu réponds en français. Tes réponses doivent être concises.Capable aussi de faire des suggestion"
+            "Ton nom est JARVIS., un assistant virtuel très intelligent, poli et un peu sarcastique. "
+            "Tu réponds en français. Tes réponses doivent être concises (sauf indication contraire). Capable aussi de faire des suggestions."
         )
         
-        # Initialisation de la mémoire
-        self.memory = Memory(self.system_prompt)
+        # Gestion du contexte et de la mémoire
+        from core.context_manager import ContextManager
+        self.context_manager = ContextManager(self.system_prompt)
+        self.memory = self.context_manager.memory
         
         self.available_functions = {
             "open_website": open_website,
@@ -355,6 +357,9 @@ class LLMEngine:
         
         info_provider = f" avec le fournisseur {provider}" if provider else ""
         logger.info(f"Je réfléchis à la requête : '{user_text}'{info_provider}")
+        
+        # Mise à jour du contexte dynamique (heure, humeur)
+        self.context_manager.update_system_prompt()
         
         # Ajout du message utilisateur dans la mémoire
         self.memory.add_user_message(user_text)
