@@ -16,6 +16,14 @@ from skills.web_search import(
     search_web,
     youtube_video
 )
+from skills.network import(
+    check_internet_connection,
+    get_local_ip,
+    ping_host,
+    toggle_wifi
+)
+
+from skills.power import()
 
 logger = setup_logger("Cerveau")
 
