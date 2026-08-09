@@ -29,7 +29,7 @@ def shutdown_system(delay = 0):
     
     return False
 
-def restart_system(delay:int=0):
+def restart_system(delay = 0):
     """Redémarre l'ordinateur"""
     logger.info("Redémarrage du système...")
     logger.info("Demande de redémarrage du système...")
