@@ -2,6 +2,7 @@
 from openai import OpenAI
 import json
 from core.config import Config
+from core.memory import Memory
 from utils.logger import setup_logger
 from skills.system_control import (
     get_datetime,
@@ -63,6 +64,9 @@ class LLMEngine:
             "Ton nom  est JARVIS., un assistant virtuel très intelligent, poli et un peu sarcastique. "
             "Tu réponds en français. Tes réponses doivent être concises.Capable aussi de faire des suggestion"
         )
+        
+        # Initialisation de la mémoire
+        self.memory = Memory(self.system_prompt)
         
         self.available_functions = {
             "open_website": open_website,
@@ -352,20 +356,18 @@ class LLMEngine:
         info_provider = f" avec le fournisseur {provider}" if provider else ""
         logger.info(f"Je réfléchis à la requête : '{user_text}'{info_provider}")
         
-        messages = [
-            {"role": "system", "content": self.system_prompt},
-            {"role": "user", "content": user_text}
-        ]
+        # Ajout du message utilisateur dans la mémoire
+        self.memory.add_user_message(user_text)
         
         try:
-            # 1. On envoie la requête en essayant chaque clé/fournisseur
-            response, client = self._call_with_fallback(messages, use_tools=True, specific_provider=provider)
+            # 1. On envoie la requête en essayant chaque clé/fournisseur avec l'historique complet
+            response, client = self._call_with_fallback(self.memory.get_messages(), use_tools=True, specific_provider=provider)
             message_ia = response.choices[0].message
             
             # 2. On vérifie si l'IA a décidé d'utiliser un ou plusieurs outils
             if message_ia.tool_calls:
                 logger.info("L'IA a décidé d'utiliser une compétence (Skill) !")
-                messages.append(message_ia)
+                self.memory.add_raw_message(message_ia)
                 
                 # 3. On exécute CHAQUE outil demandé (parfois l'IA en demande plusieurs)
                 for tool_call in message_ia.tool_calls:
@@ -382,8 +384,8 @@ class LLMEngine:
                     else:
                         resultat = f"Compétence '{nom_fonction}' non reconnue."
                     
-                    # On renvoie le résultat à l'IA
-                    messages.append({
+                    # On renvoie le résultat à l'IA dans la mémoire
+                    self.memory.add_raw_message({
                         "role": "tool",
                         "tool_call_id": tool_call.id,
                         "content": str(resultat)
@@ -391,11 +393,16 @@ class LLMEngine:
                         
                 # 4. Deuxième requête pour la réponse finale
                 logger.info("Analyse du résultat de l'action...")
-                seconde_reponse, _ = self._call_with_fallback(messages, use_tools=False, specific_provider=provider)
-                return seconde_reponse.choices[0].message.content
+                seconde_reponse, _ = self._call_with_fallback(self.memory.get_messages(), use_tools=False, specific_provider=provider)
+                reponse_finale = seconde_reponse.choices[0].message.content
+                
+                # Ajout de la réponse finale à la mémoire
+                self.memory.add_assistant_message(reponse_finale)
+                return reponse_finale
                 
             else:
                 logger.info("Réponse vocale standard générée.")
+                self.memory.add_assistant_message(message_ia.content)
                 return message_ia.content
                 
         except Exception as e:
