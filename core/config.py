@@ -6,8 +6,6 @@ class Config:
     """Classe pour stocker la configuration globale du projet."""
     
     # On récupère TOUTES les clés API, séparées par des virgules
-    # Exemple dans .env : API_KEYS=cle1,cle2,cle3
-    # On les découpe en une liste Python : ["cle1", "cle2", "cle3"]
     _raw_keys = os.getenv("API_KEYS", "")
     API_KEYS = [k.strip() for k in _raw_keys.split(",") if k.strip()]
     
@@ -25,3 +23,35 @@ class Config:
     
     # Clé pour la voix ultra-réaliste ElevenLabs
     ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY", "")
+
+    # Clés optionnelles pour d'autres fournisseurs IA
+    DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY", "")
+    CEREBRAS_API_KEY = os.getenv("CEREBRAS_API_KEY", "")
+    
+    # Configuration des fournisseurs d'IA disponibles en fallback/spécifique
+    PROVIDERS = [
+        {
+            "name": "default",
+            "keys": API_KEYS,
+            "base_url": BASE_URL,
+            "model": MODEL_NAME
+        },
+        {
+            "name": "groq",
+            "keys": [GROQ_API_KEY],
+            "base_url": "https://api.groq.com/openai/v1",
+            "model": "llama-3.3-70b-versatile"
+        },
+        {
+            "name": "deepseek",
+            "keys": [DEEPSEEK_API_KEY],
+            "base_url": "https://api.deepseek.com",
+            "model": "deepseek-chat"
+        },
+        {
+            "name": "cerebras",
+            "keys": [CEREBRAS_API_KEY],
+            "base_url": "https://api.cerebras.ai/v1",
+            "model": "llama3.1-8b"
+        }
+    ]

@@ -36,12 +36,25 @@ class LLMEngine:
     """Le moteur d'intelligence artificielle (le cerveau) de Jarvis."""
     
     def __init__(self):
-        # On vérifie qu'on a au moins une clé API
-        if not Config.API_KEYS:
-            logger.error("Aucune clé API valide trouvée. Veuillez vérifier votre fichier .env.")
+        # Construction de la liste des fournisseurs actifs
+        self.active_providers = []
+        for p in Config.PROVIDERS:
+            valid_keys = [k for k in p.get("keys", []) if k]
+            if valid_keys:
+                self.active_providers.append({
+                    "name": p["name"],
+                    "keys": valid_keys,
+                    "base_url": p["base_url"],
+                    "model": p["model"]
+                })
+                
+        if not self.active_providers:
+            logger.error("Aucun fournisseur d'IA avec une clé valide n'a été trouvé. Vérifiez votre .env.")
         else:
-            logger.info(f"{len(Config.API_KEYS)} clé(s) API disponible(s) pour le cerveau.")
+            noms_fournisseurs = ", ".join([p["name"] for p in self.active_providers])
+            logger.info(f"{len(self.active_providers)} fournisseur(s) d'IA disponible(s) : {noms_fournisseurs}")
             
+        # On garde des variables par défaut pour compatibilité externe éventuelle
         self.base_url = Config.BASE_URL
         self.model = Config.MODEL_NAME
         
@@ -295,40 +308,49 @@ class LLMEngine:
             }
         ]
         
-    def _create_client(self,api_key):
-        """Crée un client OpenAI avec une clé spécifique."""
-        return OpenAI(api_key=api_key, base_url=self.base_url)
+    def _create_client(self, api_key, base_url):
+        """Crée un client OpenAI avec une clé spécifique et une URL."""
+        return OpenAI(api_key=api_key, base_url=base_url)
     
-    def _call_with_fallback(self,messages,use_tools):
-        """Essaie chaque clé API l'une après l'autre jusqu'à ce qu'une fonctionne."""
+    def _call_with_fallback(self, messages, use_tools, specific_provider=None):
+        """Essaie les fournisseurs d'IA configurés jusqu'à ce qu'un fonctionne, ou utilise un spécifique."""
+        providers_to_try = self.active_providers
+        if specific_provider:
+            providers_to_try = [p for p in self.active_providers if p["name"].lower() == specific_provider.lower()]
+            if not providers_to_try:
+                logger.warning(f"Fournisseur demandé '{specific_provider}' non trouvé ou sans clé valide. Utilisation des fournisseurs par défaut.")
+                providers_to_try = self.active_providers
+                
+        for provider in providers_to_try:
+            for i, api_key in enumerate(provider["keys"]):
+                try:
+                    logger.debug(f"Tentative avec {provider['name']} (clé {i+1})...")
+                    client = self._create_client(api_key, provider["base_url"])
+                    
+                    params = {
+                        "model": provider["model"],
+                        "messages": messages,
+                        "temperature": 0.7
+                    }
+                    
+                    if use_tools:
+                        params["tools"] = self.tools
+                    
+                    response = client.chat.completions.create(**params)
+                    logger.info(f"✅ Réponse obtenue avec {provider['name']} (clé n°{i + 1}).")
+                    return response, client
+                    
+                except Exception as e:
+                    logger.warning(f"❌ {provider['name']} (Clé n°{i + 1}) échouée : {e}")
+                    continue
         
-        for i, api_key in enumerate(Config.API_KEYS):
-            try:
-                client = self._create_client(api_key)
-                
-                params = {
-                    "model": self.model,
-                    "messages": messages,
-                    "temperature": 0.7
-                }
-                
-                if use_tools:
-                    params["tools"] = self.tools
-                
-                response = client.chat.completions.create(**params)
-                logger.info(f"Réponse obtenue avec la clé n°{i + 1}.")
-                return response, client
-                
-            except Exception as e:
-                logger.warning(f"❌ Clé n°{i + 1} échouée : {e}")
-                continue
+        raise Exception("Tous les fournisseurs et clés API ont échoué.")
         
-        raise Exception("Toutes les clés API ont échoué.")
-        
-    def generate_response(self, user_text: str) -> str:
+    def generate_response(self, user_text: str, provider: str = None) -> str:
         """Envoie le texte à l'IA et gère l'exécution des compétences si nécessaire."""
         
-        logger.info(f"Je réfléchis à la requête : '{user_text}'")
+        info_provider = f" avec le fournisseur {provider}" if provider else ""
+        logger.info(f"Je réfléchis à la requête : '{user_text}'{info_provider}")
         
         messages = [
             {"role": "system", "content": self.system_prompt},
@@ -336,8 +358,8 @@ class LLMEngine:
         ]
         
         try:
-            # 1. On envoie la requête en essayant chaque clé
-            response, client = self._call_with_fallback(messages, use_tools=True)
+            # 1. On envoie la requête en essayant chaque clé/fournisseur
+            response, client = self._call_with_fallback(messages, use_tools=True, specific_provider=provider)
             message_ia = response.choices[0].message
             
             # 2. On vérifie si l'IA a décidé d'utiliser un ou plusieurs outils
@@ -364,12 +386,12 @@ class LLMEngine:
                     messages.append({
                         "role": "tool",
                         "tool_call_id": tool_call.id,
-                        "content": resultat
+                        "content": str(resultat)
                     })
                         
                 # 4. Deuxième requête pour la réponse finale
                 logger.info("Analyse du résultat de l'action...")
-                seconde_reponse, _ = self._call_with_fallback(messages, use_tools=False)
+                seconde_reponse, _ = self._call_with_fallback(messages, use_tools=False, specific_provider=provider)
                 return seconde_reponse.choices[0].message.content
                 
             else:
