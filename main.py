@@ -3,15 +3,15 @@ from core.llm_engine import LLMEngine
 from interfaces.input.speech_to_text import SpeechToText
 from interfaces.output.text_to_speech import TextToSpeech
 
-# 3. On crée un "logger" spécifique pour ce fichier principal
+
 logger = setup_logger("Main")
 
 def main(): 
     
-    # 4. Message de démarrage
+    # Message de démarrage
     logger.info("Initialisation du système J.A.R.V.I.S...")
     
-    # 5. On "allume" tous les organes
+    # On "allume" tous les organes
     cerveau = LLMEngine()
     oreilles = SpeechToText()
     voix = TextToSpeech() # Nouveau !
