@@ -51,8 +51,6 @@ class LLMEngine:
             "Tu réponds en français. Tes réponses doivent être concises.Capable aussi de faire des suggestion"
         )
         
-        # Dictionnaire qui associe le NOM de chaque outil à sa VRAIE fonction Python
-        # Quand l'IA demande d'exécuter "open_website", on cherche ici la fonction correspondante
         self.available_functions = {
             "open_website": open_website,
             "get_datetime": get_datetime,
@@ -65,8 +63,6 @@ class LLMEngine:
             "youtube_video": youtube_video
         }
         
-        # Liste des outils (Skills) au format JSON pour l'IA
-        # Chaque outil a un nom, une description et ses paramètres
         self.tools = [
             #  Skill 1 : Ouvrir un site web 
             {
@@ -214,11 +210,11 @@ class LLMEngine:
             }
         ]
         
-    def _create_client(self, api_key: str) -> OpenAI:
+    def _create_client(self,api_key):
         """Crée un client OpenAI avec une clé spécifique."""
         return OpenAI(api_key=api_key, base_url=self.base_url)
     
-    def _call_with_fallback(self, messages: list, use_tools: bool = True):
+    def _call_with_fallback(self,messages,use_tools):
         """Essaie chaque clé API l'une après l'autre jusqu'à ce qu'une fonctionne."""
         
         for i, api_key in enumerate(Config.API_KEYS):
