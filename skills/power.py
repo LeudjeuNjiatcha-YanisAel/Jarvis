@@ -56,18 +56,18 @@ def suspend_system():
     return False
 
 def lock_session():
-"""Verrouille la session utilisateur courante."""
-system = platform.system().lower()
-logger.info("Verrouillage de la session utilisateur...")
+    """Verrouille la session utilisateur courante."""
+    system = platform.system().lower()
+    logger.info("Verrouillage de la session utilisateur...")
 
-if system == "linux":
-    # Essaie d'abord loginctl (systemd), puis gnome-screensaver en secours
-    if run_command(["loginctl", "lock-session"]):
-        return True
-    return run_command(["gnome-screensaver-command", "-l"])
-elif system == "windows":
-    return run_command(["rundll32.exe", "user32.dll,LockWorkStation"])
-elif system == "darwin":
-    return run_command(["pmset", "displaysleepnow"])
+    if system == "linux":
+        # Essaie d'abord loginctl (systemd), puis gnome-screensaver en secours
+        if run_command(["loginctl", "lock-session"]):
+            return True
+        return run_command(["gnome-screensaver-command", "-l"])
+    elif system == "windows":
+        return run_command(["rundll32.exe", "user32.dll,LockWorkStation"])
+    elif system == "darwin":
+        return run_command(["pmset", "displaysleepnow"])
 
-return False
+    return False

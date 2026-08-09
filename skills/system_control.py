@@ -4,7 +4,7 @@ import os
 import datetime
 from utils.logger import setup_logger
 
-logger = setup_logger("Skills-Système")
+logger = setup_logger("Skills")
 
 def get_datetime() -> str:
     """Retourne la date et l'heure actuelles du système."""
